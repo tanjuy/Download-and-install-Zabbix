@@ -31,6 +31,7 @@ dnf install zabbix-server-pgsql zabbix-web-pgsql zabbix-apache-conf zabbix-sql-s
 
 echo "Postgresql service is checked out and appended to startup file"
 systemctl status postgresql
+sleep 2
 
 systemctl enable --now postgresql
 
@@ -66,3 +67,11 @@ systemctl restart zabbix-server zabbix-agent httpd php-fpm
 echo 'Zabbix Server, Zabbix Agent and php-fpm will be appended to startup file'
 systemctl enable zabbix-server zabbix-agent httpd php-fpm
 
+pg_hba_conf_path=/var/lib/pgsql/data/pg_hba.conf
+
+sed -i '83,90 s/peer/trust/g' $pg_hba_conf_path
+sed -i '83,90 s/ident/trust/g' $pg_hba_conf_path
+
+sed -i '87 i  host    all             all             0.0.0.0/24         trust' $pg_hba_conf_path
+
+systemctl restart postgresql.service
