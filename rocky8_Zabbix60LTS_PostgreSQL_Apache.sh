@@ -14,7 +14,7 @@ dnf module enable postgresql:$version
 dnf module list postgresql
 sleep 10
 
-dnf install postgresql-server
+dnf install postgresql-server -y
 
 postgresql-setup --initdb
 
@@ -27,7 +27,7 @@ dnf clean all
 
 echo "Install Zabbix server, frontend, agent\n\n"
 sleep 2
-dnf install zabbix-server-pgsql zabbix-web-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent
+dnf install zabbix-server-pgsql zabbix-web-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent -y
 
 echo "Postgresql service is checked out and appended to startup file"
 systemctl status postgresql
@@ -61,7 +61,7 @@ echo 'Firewall: '
 firewall-cmd --list-all
 
 echo 'Zabbix Server, Zabbix Agent and php-fpm will be restarted'
-sleep 1
+sleep 2
 systemctl restart zabbix-server zabbix-agent httpd php-fpm
 
 echo 'Zabbix Server, Zabbix Agent and php-fpm will be appended to startup file'
@@ -72,6 +72,6 @@ pg_hba_conf_path=/var/lib/pgsql/data/pg_hba.conf
 sed -i '83,90 s/peer/trust/g' $pg_hba_conf_path
 sed -i '83,90 s/ident/trust/g' $pg_hba_conf_path
 
-sed -i '87 i  host    all             all             0.0.0.0/24         trust' $pg_hba_conf_path
+sed -i '87 i  host    all             all             0.0.0.0/24              trust' $pg_hba_conf_path
 
 systemctl restart postgresql.service
