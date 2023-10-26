@@ -44,15 +44,15 @@ sudo -u postgres createdb -O zabbix zabbix
 echo "import initial schema and data"
 zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
 
-read -p 'Configure the database for Zabbix server and Enter for database password: ' dbpassword
+read -s -p 'Configure the database for Zabbix server and Enter for database password: ' dbpassword
 
 zabbix_server_conf=/etc/zabbix/zabbix_server.conf
 
-if grep -q '# DBUser=' $zabbix_server_conf then;
-	sed -i "s/# DBPassword=/DBPassword=$dbpassword" $zabbix_server_conf
+if grep -q '# DBPassword=' $zabbix_server_conf; then
+	sed -i "s/^# DBPassword=/DBPassword=$dbpassword/" $zabbix_server_conf
 else
 	echo 'Current Situation: '
-	grep 'DBUser=' $zabbix_server_conf
+	grep 'DBPassword=' $zabbix_server_conf
 fi
 
 systemctl restart postgresql
