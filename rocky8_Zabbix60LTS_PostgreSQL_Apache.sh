@@ -58,7 +58,7 @@ else
 fi
 
 systemctl restart postgresql
-
+echo
 echo "${yellow}${bold}Configuring Firewall : ${normal}"
 firewall-cmd --list-all
 echo
@@ -85,7 +85,7 @@ sed -i '87 i  host    all             all             0.0.0.0/0               tr
 
 systemctl restart postgresql.service
 
-IP_address=$(ip -c a | grep 'inet' | grep -v '127' | awk '{print $2}' | awk -F '/' '{print $1}')
+IP_address=$(ip -c a | grep 'inet ' | grep -v '127' | awk '{print $2}' | awk -F '/' '{print $1}')
 printf "
 	Zabbix is installed successfully\n
 	http://$IP_address/zabbix
