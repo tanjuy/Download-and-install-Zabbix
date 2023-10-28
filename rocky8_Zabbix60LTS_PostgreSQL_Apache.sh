@@ -81,6 +81,14 @@ pg_hba_conf_path=/var/lib/pgsql/data/pg_hba.conf
 sed -i '83,90 s/peer/trust/g' $pg_hba_conf_path
 sed -i '83,90 s/ident/trust/g' $pg_hba_conf_path
 
-sed -i '87 i  host    all             all             0.0.0.0/24              trust' $pg_hba_conf_path
+sed -i '87 i  host    all             all             0.0.0.0/0               trust' $pg_hba_conf_path
 
 systemctl restart postgresql.service
+
+IP_address=$(ip -c a | grep 'inet' | grep -v '127' | awk '{print $2}' | awk -F '/' '{print $1}')
+printf "
+	Zabbix is installed successfully\n
+	http://$IP_address/zabbix
+"
+
+
