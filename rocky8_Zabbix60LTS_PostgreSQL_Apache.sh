@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+source ./terminal_color_font.sh
+
 
 printf "
-	Zabbix 6.0 LTS supported version: 13 - 16
+	Zabbix 6.0 LTS supported version: postgresql:13 - 16
 	Please, check out https://www.zabbix.com/documentation/6.0/en/manual/installation/requirements
 \n"
 
@@ -18,14 +20,14 @@ dnf install postgresql-server -y
 
 postgresql-setup --initdb
 
-echo "\n========================================================================"
+echo "\n${cyan}${bold}============================= Zabbix Installation  ===========================================${normal}"
 echo "Install Zabbix repository\n\n"
 sleep 2
 rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/8/x86_64/zabbix-release-6.0-4.el8.noarch.rpm
 
 dnf clean all
 
-echo "Install Zabbix server, frontend, agent\n\n"
+echo "${green}Install Zabbix server, frontend, agent${normal}\n\n"
 sleep 2
 dnf install zabbix-server-pgsql zabbix-web-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent -y
 
@@ -37,7 +39,7 @@ systemctl enable --now postgresql
 
 systemctl status postgresql
 
-echo "Create initial database"
+echo "${yellow}${bold}Creating initial database${normal}"
 sudo -u postgres createuser --pwprompt zabbix
 sudo -u postgres createdb -O zabbix zabbix
 
@@ -57,8 +59,15 @@ fi
 
 systemctl restart postgresql
 
-echo 'Firewall: '
+echo "${yellow}${bold}Configuring Firewall : ${normal}"
 firewall-cmd --list-all
+echo
+firewall-cmd --add-port=80/tcp --permanent
+firewall-cmd --add-port=443/tcp --permanent
+firewall-cmd --reload
+echo
+firewall-cmd --list-all
+sleep 3
 
 echo 'Zabbix Server, Zabbix Agent and php-fpm will be restarted'
 sleep 2
