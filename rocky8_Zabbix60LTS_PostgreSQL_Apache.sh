@@ -11,7 +11,7 @@ dnf module list postgresql
 
 read -p "Choose supported version of zabbix: " version
 
-dnf module enable postgresql:$version
+dnf module enable postgresql:$version -y
 
 dnf module list postgresql
 sleep 10
@@ -21,7 +21,7 @@ dnf install postgresql-server -y
 postgresql-setup --initdb
 
 echo -e "\n${cyan}${bold}============================= Zabbix Installation  ===========================================${normal}"
-echo "Install Zabbix repository\n\n"
+echo -e "Install Zabbix repository\n\n"
 sleep 2
 rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/8/x86_64/zabbix-release-6.0-4.el8.noarch.rpm
 
@@ -61,9 +61,10 @@ systemctl restart postgresql
 echo
 echo "${yellow}${bold}Configuring Firewall : ${normal}"
 firewall-cmd --list-all
-echo "80 and 443 port are editing for zabbix "
+echo "80, 443 and 10051 port are editing for zabbix "
 firewall-cmd --add-port=80/tcp --permanent
 firewall-cmd --add-port=443/tcp --permanent
+firewall-cmd --add-port=10051/tcp --permanent
 firewall-cmd --reload
 echo
 firewall-cmd --list-all
