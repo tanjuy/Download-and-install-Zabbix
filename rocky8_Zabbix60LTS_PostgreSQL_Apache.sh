@@ -20,14 +20,14 @@ dnf install postgresql-server -y
 
 postgresql-setup --initdb
 
-echo "\n${cyan}${bold}============================= Zabbix Installation  ===========================================${normal}"
+echo -e "\n${cyan}${bold}============================= Zabbix Installation  ===========================================${normal}"
 echo "Install Zabbix repository\n\n"
 sleep 2
 rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/8/x86_64/zabbix-release-6.0-4.el8.noarch.rpm
 
 dnf clean all
 
-echo "${green}Install Zabbix server, frontend, agent${normal}\n\n"
+echo -e "${green}Install Zabbix server, frontend, agent${normal}\n\n"
 sleep 2
 dnf install zabbix-server-pgsql zabbix-web-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent -y
 
@@ -89,6 +89,7 @@ IP_address=$(ip -c a | grep 'inet ' | grep -v '127' | awk '{print $2}' | awk -F 
 printf "
 	Zabbix is installed successfully\n
 	http://$IP_address/zabbix
+	${red}${bold}Username: Admin -- Password: zabbix  Not: Please, change login Username and Password${normal}
 "
 
 
