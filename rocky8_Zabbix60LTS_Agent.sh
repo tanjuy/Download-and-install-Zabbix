@@ -23,9 +23,9 @@ zabbix_agentd_conf=/etc/zabbix/zabbix_agentd.conf
 
 read -p 'Enter a Zabbix Server IP: ' zabbix_server_ip
 
-sed -i "s/Server=127.0.0.1/Server=$zabbix_server_ip/" $zabbix_agentd_conf
+sed -i "s/^Server=/Server=$zabbix_server_ip/" $zabbix_agentd_conf
 
-sed -i "s/ServerActive=127.0.0.1/ServerActive=$zabbix_server_ip/" $zabbix_agentd_conf
+sed -i "s/^ServerActive=/ServerActive=$zabbix_server_ip/" $zabbix_agentd_conf
 
 hostname_var=$(hostname)
 

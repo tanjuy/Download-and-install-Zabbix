@@ -61,7 +61,7 @@ systemctl restart postgresql
 echo
 echo "${yellow}${bold}Configuring Firewall : ${normal}"
 firewall-cmd --list-all
-echo
+echo "80 and 443 port are editing for zabbix "
 firewall-cmd --add-port=80/tcp --permanent
 firewall-cmd --add-port=443/tcp --permanent
 firewall-cmd --reload
